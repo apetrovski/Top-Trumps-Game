@@ -8,6 +8,8 @@ import json
 import time
 
 rnd=1
+i,j=0,0
+PlGo,CompG0=1,0
 
 def user(player, computer):
     global rnd
@@ -22,59 +24,44 @@ def Enemy(player, computer):
     time.sleep(0.5)
     print("Computer won the round\n","\n\tThese are your cards:\n\n",json.dumps(player, indent = 4))
     rnd += 1
-   
+
+def comparison(player, computer, choice):
+    if choice in ["Exercise","Intelligence","Friendliness"]:
+        print("This was the Computers card:\n",json.dumps(computer[j], indent = 4))
+        time.sleep(2)
+        if player[i][choice]>computer[j][choice]:
+            user(player, computer)
+            return 1,0
+        else:
+            Enemy(player, computer)
+            return 0,1
+    elif choice == "Drool":
+        print("This was the Computers card:\n",json.dumps(computer[j], indent = 4))
+        if player[i][choice]<computer[j][choice]:
+            user(player, computer)
+            return 1,0
+        else:
+            Enemy(player, computer)
+            return 0,1
    
 def Compare(player, Computer):
-    PlGo,CompG0=1,0
+    global PlGo,CompG0
     player=player
     computer=Computer
-    i,j=0,0
+    global i,j
     global rnd
     while len(player)>0 and len(computer)>0:
         while PlGo==1 and len(computer)!=0 and len(player)!=0:
             print(str("-"*50)+"\n\nROUND {}\n".format(rnd));
             choice=input("what atribute do you want to use:\n\t Exercise\n\t Intelligence\n\t Friendliness\n\t Drool\n\t")
             print(choice)
-            if choice in ["Exercise","Intelligence","Friendliness"]:
-                print("This was the Computers card:\n",json.dumps(computer[j], indent = 4))
-                time.sleep(2)
-                if player[i][choice]>computer[j][choice]:
-                    PlGo,CompG0=1,0
-                    user(player, computer)
-                else:
-                    PlGo,CompG0=0,1
-                    Enemy(player, computer)
-            elif choice == "Drool":
-                print("This was the Computers card:\n",json.dumps(computer[j], indent = 4))
-                if player[i][choice]<computer[j][choice]:
-                    PlGo,CompG0=1,0
-                    user(player, computer)
-                else:
-                    PlGo,CompG0=0,1
-                    Enemy(player, computer)
+            PlGo,CompG0=comparison(player, computer, choice)
         while CompG0==1 and len(computer)!=0 and len(player)!=0:
             print(str("-"*50)+"\n\nROUND {}\n".format(rnd));
             choice2=random.choice(["Exercise","Intelligence","Friendliness","Drool"])
             print("Computers choice is:\t",choice2)
             time.sleep(2)
-            if choice in ["Exercise","Intelligence","Friendliness"]:
-                print("This was the Computers card:\n",json.dumps(computer[j], indent = 4))
-                time.sleep(2)
-                if player[i][choice2]>computer[j][choice2]:
-                    PlGo,CompG0=1,0
-                    user(player, computer)
-                else:
-                    PlGo,CompG0=0,1
-                    Enemy(player, computer)
-            elif choice == "Drool":
-                print("This was the Computers card:\n",json.dumps(computer[j], indent = 4))
-                time.sleep(2)
-                if player[i][choice2]<computer[j][choice2]:
-                    PlGo,CompG0=1,0
-                    user(player, computer)
-                else:
-                    PlGo,CompG0=0,1
-                    Enemy(player, computer)
+            PlGo,CompG0=comparison(player, computer,choice2)
         if len(computer)==0:
             print("\t\tPlayer Won in",rnd,"rounds\n\t\tThe End\n\n")
             break
